@@ -10,8 +10,10 @@ export async function GET() {
     const entryRepository = new EntryRepository();
     const response = await entryRepository.getAll();
     return NextResponse.json(response);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
   }
 }
 
@@ -29,8 +31,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({});
-  } catch (err: any) {
-    console.log(err);
-    return NextResponse.json({ err: err.message });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json({ message: err.message });
+    }
+    return NextResponse.json({ message: "Erro interno", statusCode: 500 });
   }
 }

@@ -1,4 +1,4 @@
-// src/pages/login.tsx
+// src/pages/login.tsx (CORRIGIDO)
 
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // --- 1. Definição do Schema Zod para o Login ---
+// ✅ MOVIDO: A chamada do useAuth DEVE estar dentro do componente!
 const LoginSchema = z.object({
   username: z
     .string()
@@ -22,22 +23,25 @@ type LoginFormData = z.infer<typeof LoginSchema>;
  * @description Componente da página de login.
  */
 function LoginPage() {
-  const { login, isAuthenticated } = useAuth();
+  // ✅ 1. CHAME TODOS OS HOOKS NO TOPO DA FUNÇÃO!
+  const { login, isAuthenticated } = useAuth(); // CORRIGIDO: Agora dentro do componente
   const router = useRouter();
 
-  // Se o usuário JÁ estiver logado, redireciona para a página inicial (/)
-  if (isAuthenticated) {
-    router.push("/");
-    return null; // Não renderiza nada enquanto redireciona
-  }
-
   const {
+    // CORRIGIDO: useForm não é mais chamado condicionalmente
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
   });
+
+  // Se o usuário JÁ estiver logado, redireciona para a página inicial (/)
+  // A lógica condicional DEVE vir APÓS a chamada dos Hooks.
+  if (isAuthenticated) {
+    router.push("/");
+    return null; // Não renderiza nada enquanto redireciona
+  }
 
   // --- 2. Lógica de Submissão do Formulário ---
   const onSubmit = async (data: LoginFormData) => {
@@ -47,15 +51,12 @@ function LoginPage() {
     console.log("Tentativa de Login com:", data.username);
 
     // SIMULAÇÃO DE SUCESSO DE LOGIN:
-    // Apenas aguarda um pouco para simular a chamada de rede.
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Chama a função login() do contexto com o nome do usuário.
-    // Isso atualiza o estado de isAuthenticated para true.
     login(data.username);
 
-    // O useEffect no useAuth cuidará do redirecionamento após o estado de login mudar,
-    // mas vamos garantir o redirecionamento aqui também:
+    // Garante o redirecionamento.
     router.push("/");
   };
 

@@ -1,6 +1,6 @@
-import { google } from "googleapis";
+import { google, sheets_v4 } from "googleapis";
 import { env } from "@/env";
-let sheetsClient: any;
+let sheetsClient: sheets_v4.Sheets | null = null;
 
 const credentials = {
   client_email: env.client_email,
