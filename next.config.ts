@@ -1,7 +1,12 @@
-import type { NextConfig } from "next";
+// next.config.js
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Configuração padrão para o Pages Router
+  pageExtensions: ["tsx", "ts", "jsx", "js"],
+
+  // Se você tiver alguma configuração especial, ela vai aqui.
+  // ...
 };
 
-export default nextConfig;
+module.exports = nextConfig;
