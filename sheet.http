@@ -1,0 +1,19 @@
+### Requisição GET
+GET https://jsonplaceholder.typicode.com/posts/1
+Content-Type: application/json
+
+### Requisição POST
+POST http://localhost:3000/api/entries
+Content-Type: application/json
+
+{
+  "date": "2025-10-03",
+  "description": "Compra no supermercado",
+  "category": "Alimentação",
+  "status": "pago",
+  "value": 250.75,
+  "type": "saída"
+}
+
+
+
